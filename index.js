@@ -32,12 +32,14 @@ app.use(
 );
 
 const adminRouter = require("./routes/admin");
+const brandRouter = require("./routes/brand");
 const projectRouter = require("./routes/project");
 const userRouter = require("./routes/user");
 
 const errorController = require("./controllers/errors");
 app.use("/admin", adminRouter);
 app.use("/project", projectRouter);
+app.use("/brand", brandRouter);
 app.use("/user", userRouter);
 app.use(errorController.geterror404);
 app.use(errorController.geterror500);
