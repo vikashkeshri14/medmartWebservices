@@ -5,8 +5,8 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: false, // use SSL
   auth: {
-    user: "it.not@artar.com.sa",
-    pass: "Artar@@123",
+    user: "",
+    pass: "",
   },
 });
 module.exports = class mailControllers {
