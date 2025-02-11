@@ -15,8 +15,8 @@ module.exports = class mailControllers {
     try {
       //return;
       const mailOptions = {
-        from: "it.not@artar.com.sa",
-        to: "v.keshri@artar.com.sa",
+        from: "",
+        to: "",
         subject: subject,
         html: message,
       };
