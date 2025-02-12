@@ -34,13 +34,13 @@ app.use(
 
 const adminRouter = require("./routes/admin");
 const brandRouter = require("./routes/brand");
-const projectRouter = require("./routes/project");
+const drugRouter = require("./routes/drug");
 const userRouter = require("./routes/user");
 const categoryRouter = require("./routes/categories");
 
 const errorController = require("./controllers/errors");
 app.use("/admin", adminRouter);
-app.use("/project", projectRouter);
+app.use("/drugs", drugRouter);
 app.use("/brand", brandRouter);
 app.use("/user", userRouter);
 app.use("/categories", categoryRouter);
