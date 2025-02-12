@@ -15,6 +15,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
+      "http://localhost:3001",
       "http://192.168.21.53:3002",
       "http://192.168.21.53:3001",
       "http://192.168.21.53:3000",
@@ -35,12 +36,14 @@ const adminRouter = require("./routes/admin");
 const brandRouter = require("./routes/brand");
 const projectRouter = require("./routes/project");
 const userRouter = require("./routes/user");
+const categoryRouter = require("./routes/categories");
 
 const errorController = require("./controllers/errors");
 app.use("/admin", adminRouter);
 app.use("/project", projectRouter);
 app.use("/brand", brandRouter);
 app.use("/user", userRouter);
+app.use("/categories", categoryRouter);
 app.use(errorController.geterror404);
 app.use(errorController.geterror500);
 
