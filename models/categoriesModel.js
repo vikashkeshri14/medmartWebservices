@@ -12,6 +12,14 @@ module.exports = class categoriesModel {
     return results;
   };
 
+  static getCategory = async (args) => {
+    const results = await db.query_new(
+      "select *from categories order by name "
+    );
+
+    return results;
+  };
+
   static getCategoryByPagination = async (args) => {
     const cnt = await db.query_new("select count(id) as cnt from categories");
     const results = await db.query_new(

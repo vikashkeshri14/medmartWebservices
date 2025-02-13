@@ -38,10 +38,252 @@ module.exports = class projectControllers {
       res.status(200).json(obj);
     }
   };
+  static getDrugByKey = async (req, res, next) => {
+    const results = await drugModel.getDrugByKey(req.body);
+
+    if (results.length) {
+      const obj = {
+        message: "Data fetch successfully",
+        results: results,
+        status: true,
+      };
+      res.status(200).json(obj);
+    } else {
+      const obj = {
+        message: "No data",
+        results: [],
+        status: false,
+      };
+      res.status(200).json(obj);
+    }
+  };
 
   static importDrugs = async (req, res, next) => {
     const results = await drugModel.importDrugs(req.body);
 
+    if (results) {
+      const obj = {
+        message: "Data fetch successfully",
+        results: results,
+        status: true,
+      };
+      res.status(200).json(obj);
+    } else {
+      const obj = {
+        message: "No data",
+        results: [],
+        status: false,
+      };
+      res.status(200).json(obj);
+    }
+  };
+
+  static addDrug = async (req, res, next) => {
+    // console.log(req.body);
+    try {
+      if (req.body.name && req.body.images.length && req.body.name_ar) {
+        const results = await drugModel.addDrug(req.body);
+        if (results) {
+          const obj = {
+            message: "Successfully Added ",
+            results: "added",
+            status: true,
+          };
+          res.status(200).json(obj);
+        } else {
+          const obj = {
+            message: "Please try again",
+            result: [],
+            status: false,
+          };
+          //console.log(obj);
+          res.status(200).json(obj);
+        }
+      } else {
+        next();
+      }
+    } catch (err) {
+      console.log(err);
+      err.statusCode = 500;
+      next();
+    }
+  };
+
+  static updateDrug = async (req, res, next) => {
+    try {
+      if (req.body.name && req.body.name_ar) {
+        const results = await drugModel.updateDrug(req.body);
+        if (results) {
+          const obj = {
+            message: "Successfully Updated ",
+            results: "added",
+            status: true,
+          };
+          res.status(200).json(obj);
+        } else {
+          const obj = {
+            message: "Please try again",
+            result: [],
+            status: false,
+          };
+          //console.log(obj);
+          res.status(200).json(obj);
+        }
+      } else {
+        next();
+      }
+    } catch (err) {
+      console.log(err);
+      err.statusCode = 500;
+      next();
+    }
+  };
+
+  static addHotdeal = async (req, res, next) => {
+    // console.log(req.body);
+    try {
+      if (req.body.id) {
+        const results = await drugModel.addHotdeal(req.body);
+        if (results) {
+          const obj = {
+            message: "Successfully Added ",
+            results: "added",
+            status: true,
+          };
+          res.status(200).json(obj);
+        } else {
+          const obj = {
+            message: "Please try again",
+            result: [],
+            status: false,
+          };
+          //console.log(obj);
+          res.status(200).json(obj);
+        }
+      } else {
+        next();
+      }
+    } catch (err) {
+      console.log(err);
+      err.statusCode = 500;
+      next();
+    }
+  };
+
+  static addBestselling = async (req, res, next) => {
+    // console.log(req.body);
+    try {
+      if (req.body.id) {
+        const results = await drugModel.addBestselling(req.body);
+        if (results) {
+          const obj = {
+            message: "Successfully Added ",
+            results: "added",
+            status: true,
+          };
+          res.status(200).json(obj);
+        } else {
+          const obj = {
+            message: "Please try again",
+            result: [],
+            status: false,
+          };
+          //console.log(obj);
+          res.status(200).json(obj);
+        }
+      } else {
+        next();
+      }
+    } catch (err) {
+      console.log(err);
+      err.statusCode = 500;
+      next();
+    }
+  };
+
+  static removeHotdeal = async (req, res, next) => {
+    // console.log(req.body);
+    try {
+      if (req.body.id) {
+        const results = await drugModel.removeHotdeal(req.body);
+        if (results) {
+          const obj = {
+            message: "Successfully Added ",
+            results: "added",
+            status: true,
+          };
+          res.status(200).json(obj);
+        } else {
+          const obj = {
+            message: "Please try again",
+            result: [],
+            status: false,
+          };
+          //console.log(obj);
+          res.status(200).json(obj);
+        }
+      } else {
+        next();
+      }
+    } catch (err) {
+      console.log(err);
+      err.statusCode = 500;
+      next();
+    }
+  };
+
+  static removeBestselling = async (req, res, next) => {
+    // console.log(req.body);
+    try {
+      if (req.body.id) {
+        const results = await drugModel.removeBestselling(req.body);
+        if (results) {
+          const obj = {
+            message: "Successfully Added ",
+            results: "added",
+            status: true,
+          };
+          res.status(200).json(obj);
+        } else {
+          const obj = {
+            message: "Please try again",
+            result: [],
+            status: false,
+          };
+          //console.log(obj);
+          res.status(200).json(obj);
+        }
+      } else {
+        next();
+      }
+    } catch (err) {
+      console.log(err);
+      err.statusCode = 500;
+      next();
+    }
+  };
+
+  static getBestselling = async (req, res, next) => {
+    const results = await drugModel.getBestselling(req.body);
+    if (results) {
+      const obj = {
+        message: "Data fetch successfully",
+        results: results,
+        status: true,
+      };
+      res.status(200).json(obj);
+    } else {
+      const obj = {
+        message: "No data",
+        results: [],
+        status: false,
+      };
+      res.status(200).json(obj);
+    }
+  };
+
+  static getHotdeal = async (req, res, next) => {
+    const results = await drugModel.getHotdeal(req.body);
     if (results) {
       const obj = {
         message: "Data fetch successfully",
