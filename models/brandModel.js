@@ -25,6 +25,13 @@ module.exports = class brandModel {
     return obj;
   };
 
+  static getBrand = async (args) => {
+    //const cnt = await db.query_new("select count(id) as cnt from brands");
+    const results = await db.query_new("select *from brands");
+
+    return results;
+  };
+
   static addBrand = async (args) => {
     let name = args.name;
     let slug = args.name.replace(/ /g, "-").toLowerCase();

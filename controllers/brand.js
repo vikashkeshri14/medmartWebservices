@@ -37,6 +37,24 @@ module.exports = class brandControllers {
       res.status(200).json(obj);
     }
   };
+  static getBrand = async (req, res, next) => {
+    const results = await brandModel.getBrand(req.body);
+    if (results) {
+      const obj = {
+        message: "Data fetch successfully",
+        results: results,
+        status: true,
+      };
+      res.status(200).json(obj);
+    } else {
+      const obj = {
+        message: "No data",
+        results: [],
+        status: false,
+      };
+      res.status(200).json(obj);
+    }
+  };
   static addBrand = async (req, res, next) => {
     // console.log(req.body);
     try {
