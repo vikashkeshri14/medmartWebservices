@@ -55,6 +55,24 @@ module.exports = class categoriesControllers {
       res.status(200).json(obj);
     }
   };
+  static getCategoryWithDrugCount = async (req, res, next) => {
+    const results = await categoriesModel.getCategoryWithDrugCount();
+    if (results) {
+      const obj = {
+        message: "Data fetch successfully",
+        results: results,
+        status: true,
+      };
+      res.status(200).json(obj);
+    } else {
+      const obj = {
+        message: "No data",
+        results: [],
+        status: false,
+      };
+      res.status(200).json(obj);
+    }
+  };
   static addCategory = async (req, res, next) => {
     // console.log(req.body);
     try {

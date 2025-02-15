@@ -23,4 +23,5 @@ Router.post("/addBestselling", drugControllers.addBestselling);
 Router.post("/removeBestselling", drugControllers.removeBestselling);
 
 Router.post("/getBestselling", drugControllers.getBestselling);
+
 module.exports = Router;

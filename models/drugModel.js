@@ -18,7 +18,39 @@ module.exports = class projectModel {
   };
 
   static getDrugByPagination = async (args) => {
-    if (args.hasOwnProperty("key") && args.key.trim() != "") {
+    if (
+      args.hasOwnProperty("key") &&
+      args.key.trim() != "" &&
+      args.hasOwnProperty("sortBy") &&
+      args.sortBy
+    ) {
+      const cnt = await db.query_new(
+        `select count(id) as cnt from drugs where name like "%${args.key}%" or name_ar like "%${args.key}%"`
+      );
+      if (args.sortBy == "1") {
+        const results = await db.query_new(
+          `select d.* , h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where name like "%${args.key}%" or name_ar like "%${args.key}%" order by price  limit ?,?`,
+          [(args.currentPage - 1) * args.postsPerPage, args.postsPerPage]
+        );
+
+        const obj = {
+          totalPage: cnt[0].cnt,
+          data: results,
+        };
+        return obj;
+      } else {
+        const results = await db.query_new(
+          `select d.* , h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where name like "%${args.key}%" or name_ar like "%${args.key}%" order by price desc limit ?,?`,
+          [(args.currentPage - 1) * args.postsPerPage, args.postsPerPage]
+        );
+
+        const obj = {
+          totalPage: cnt[0].cnt,
+          data: results,
+        };
+        return obj;
+      }
+    } else if (args.hasOwnProperty("key") && args.key.trim() != "") {
       const cnt = await db.query_new(
         `select count(id) as cnt from drugs where name like "%${args.key}%" or name_ar like "%${args.key}%"`
       );
@@ -32,6 +64,32 @@ module.exports = class projectModel {
         data: results,
       };
       return obj;
+    } else if (args.hasOwnProperty("sortBy") && args.sortBy.trim() != "") {
+      const cnt = await db.query_new("select count(id) as cnt from drugs");
+
+      if (args.sortBy == "1") {
+        const results = await db.query_new(
+          "select d.*,h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  order by price  limit ?,?",
+          [(args.currentPage - 1) * args.postsPerPage, args.postsPerPage]
+        );
+
+        const obj = {
+          totalPage: cnt[0].cnt,
+          data: results,
+        };
+        return obj;
+      } else {
+        const results = await db.query_new(
+          "select d.*,h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  order by price desc limit ?,?",
+          [(args.currentPage - 1) * args.postsPerPage, args.postsPerPage]
+        );
+
+        const obj = {
+          totalPage: cnt[0].cnt,
+          data: results,
+        };
+        return obj;
+      }
     } else {
       const cnt = await db.query_new("select count(id) as cnt from drugs");
       const results = await db.query_new(

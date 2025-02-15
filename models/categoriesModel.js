@@ -11,6 +11,13 @@ module.exports = class categoriesModel {
 
     return results;
   };
+  static getCategoryWithDrugCount = async () => {
+    const results = await db.query_new(
+      "select category,category_ar,category_slug,COUNT(category_slug) as cnt from drugs  GROUP by category_slug"
+    );
+
+    return results;
+  };
 
   static getCategory = async (args) => {
     const results = await db.query_new(
