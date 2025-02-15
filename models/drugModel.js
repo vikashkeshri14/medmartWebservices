@@ -12,7 +12,7 @@ module.exports = class projectModel {
 
   static getDrugByKey = async (args) => {
     const results = db.query_new(
-      `select *from drugs where name like "%${args.key}%" or name_ar like "%${args.key}%" order by name,name_ar limit 0,10 `
+      `select *from drugs where name like "%${args.key}%" or name_ar like "%${args.key}%" order by name,name_ar limit 0,5 `
     );
     return results;
   };
