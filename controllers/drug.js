@@ -1,7 +1,39 @@
 const drugModel = require("../models/drugModel");
 module.exports = class projectControllers {
   static getDrugByPagination = async (req, res, next) => {
-    const results = await drugModel.getDrugByPagination(req.body);
+    let results = [];
+    if (
+      req.body.hasOwnProperty("key") &&
+      req.body.hasOwnProperty("categories") &&
+      req.body.hasOwnProperty("sortBy") &&
+      req.body.sortBy &&
+      req.body.categories.length &&
+      req.body.key
+    ) {
+      results = await drugModel.getDrugByPaginationByAllFilter(req.body);
+    } else if (
+      req.body.hasOwnProperty("key") &&
+      req.body.hasOwnProperty("categories") &&
+      req.body.categories.length &&
+      req.body.key
+    ) {
+      results = await drugModel.getDrugByPaginationKeyCat(req.body);
+    } else if (
+      req.body.hasOwnProperty("sortBy") &&
+      req.body.hasOwnProperty("categories") &&
+      req.body.categories.length &&
+      req.body.sortBy
+    ) {
+      results = await drugModel.getDrugByPaginationSortCat(req.body);
+    } else if (
+      req.body.hasOwnProperty("categories") &&
+      req.body.categories.length
+    ) {
+      results = await drugModel.getDrugByPaginationCat(req.body);
+    } else {
+      results = await drugModel.getDrugByPagination(req.body);
+    }
+
     if (results) {
       const obj = {
         message: "Data fetch successfully",

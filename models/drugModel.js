@@ -5,7 +5,7 @@ const Moment = require("moment-timezone");
 const path = require("path");
 module.exports = class projectModel {
   static getDrugById = async (args) => {
-    console.log("select *from drugs where id=?", [args.id]);
+    // console.log("select *from drugs where id=?", [args.id]);
     const results = db.query_new("select *from drugs where id=?", [args.id]);
     return results;
   };
@@ -103,6 +103,125 @@ module.exports = class projectModel {
       };
       return obj;
     }
+  };
+
+  static getDrugByPaginationByAllFilter = async (args) => {
+    const cnt = await db.query_new(
+      `select count(id) as cnt from drugs where (name like "%${args.key}%" or name_ar like "%${args.key}%") and category_slug in (?)`,
+      [args.categories]
+    );
+    if (args.sortBy == "1") {
+      const results = await db.query_new(
+        `select d.* , h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where (d.name like "%${args.key}%" or d.name_ar like "%${args.key}%") and d.category_slug in (?) order by price  limit ?,?`,
+        [
+          args.categories,
+          (args.currentPage - 1) * args.postsPerPage,
+          args.postsPerPage,
+        ]
+      );
+
+      const obj = {
+        totalPage: cnt[0].cnt,
+        data: results,
+      };
+      return obj;
+    } else {
+      const results = await db.query_new(
+        `select d.* , h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where (d.name like "%${args.key}%" or d.name_ar like "%${args.key}%") and d.category_slug in (?) order by price desc limit ?,?`,
+        [
+          args.categories,
+          (args.currentPage - 1) * args.postsPerPage,
+          args.postsPerPage,
+        ]
+      );
+
+      const obj = {
+        totalPage: cnt[0].cnt,
+        data: results,
+      };
+      return obj;
+    }
+  };
+
+  static getDrugByPaginationKeyCat = async (args) => {
+    const cnt = await db.query_new(
+      `select count(id) as cnt from drugs where (name like "%${args.key}%" or name_ar like "%${args.key}%") and category_slug in (?)`,
+      [args.categories]
+    );
+    const results = await db.query_new(
+      `select d.*,h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where (d.name like "%${args.key}%" or d.name_ar like "%${args.key}%") and  d.category_slug in (?) order by id desc limit ?,?`,
+      [
+        args.categories,
+        (args.currentPage - 1) * args.postsPerPage,
+        args.postsPerPage,
+      ]
+    );
+
+    const obj = {
+      totalPage: cnt[0].cnt,
+      data: results,
+    };
+    return obj;
+  };
+
+  static getDrugByPaginationSortCat = async (args) => {
+    const cnt = await db.query_new(
+      `select count(id) as cnt from drugs where category_slug in (?)`,
+      [args.categories]
+    );
+    if (args.sortBy == "1") {
+      const results = await db.query_new(
+        `select d.* , h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where d.category_slug in (?) order by price  limit ?,?`,
+        [
+          args.categories,
+          (args.currentPage - 1) * args.postsPerPage,
+          args.postsPerPage,
+        ]
+      );
+
+      const obj = {
+        totalPage: cnt[0].cnt,
+        data: results,
+      };
+      return obj;
+    } else {
+      const results = await db.query_new(
+        `select d.* , h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where d.category_slug in (?) order by price desc limit ?,?`,
+        [
+          args.categories,
+          (args.currentPage - 1) * args.postsPerPage,
+          args.postsPerPage,
+        ]
+      );
+
+      const obj = {
+        totalPage: cnt[0].cnt,
+        data: results,
+      };
+      return obj;
+    }
+  };
+
+  static getDrugByPaginationCat = async (args) => {
+    //console.log("args", args);
+    const cnt = await db.query_new(
+      "select count(id) as cnt from drugs where category_slug in (?)",
+      [args.categories]
+    );
+    const results = await db.query_new(
+      "select d.*,h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where d.category_slug in (?) order by id desc limit ?,?",
+      [
+        args.categories,
+        (args.currentPage - 1) * args.postsPerPage,
+        args.postsPerPage,
+      ]
+    );
+
+    const obj = {
+      totalPage: cnt[0].cnt,
+      data: results,
+    };
+    return obj;
   };
 
   static importDrugs = async (args) => {
