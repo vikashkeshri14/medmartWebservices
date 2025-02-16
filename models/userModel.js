@@ -7,15 +7,13 @@ module.exports = class userModel {
     let name = args.name;
     let email = args.email;
     let phone = args.phone;
-    let type = args.type;
-
     let message = args.message;
 
     let created_at = Moment().tz("Asia/Riyadh").format("YYYY-MM-DD HH:mm:ss");
 
     let insert = await db.query_new(
-      "insert into contacts (name,email,phone,type,message,created_at) values(?,?,?,?,?,?)",
-      [name, email, phone, type, message, created_at]
+      "insert into contacts (name,email,phone,message,created_at) values(?,?,?,?,?)",
+      [name, email, phone, message, created_at]
     );
 
     return insert;
