@@ -2,6 +2,41 @@ const userModel = require("../models/userModel");
 const email = require("./mail");
 
 module.exports = class projectControllers {
+  static login = async (req, res, next) => {
+    try {
+      if (req.body.email && req.body.password) {
+        let data = req.body;
+        const email = data.email;
+        const password = data.password;
+
+        const [email_check] = await userModel.checkEmailPass(email, password);
+
+        if (email_check) {
+          const obj = {
+            message: "Successfully logged in ",
+            results: email_check,
+            status: true,
+          };
+          res.status(200).json(obj);
+        } else {
+          const obj = {
+            message: "Username or password entered wrong!",
+            result: [],
+            status: false,
+          };
+          //console.log(obj);
+          res.status(200).json(obj);
+        }
+      } else {
+        next();
+      }
+    } catch (err) {
+      console.log(err);
+      err.statusCode = 500;
+      next();
+    }
+  };
+
   static subscribe = async (req, res, next) => {
     // console.log(req.body);
     try {
@@ -20,6 +55,91 @@ module.exports = class projectControllers {
           const obj = {
             message: "Email already register",
             results: "added",
+            status: false,
+          };
+          res.status(200).json(obj);
+        }
+      } else {
+        next();
+      }
+    } catch (err) {
+      console.log(err);
+      err.statusCode = 500;
+      next();
+    }
+  };
+
+  static checkEmail = async (req, res, next) => {
+    try {
+      if (req.body.email) {
+        const results = await userModel.checkEmail(req.body);
+        if (results) {
+          const obj = {
+            message: "Data fetch successfully",
+            results: results,
+            status: true,
+          };
+          res.status(200).json(obj);
+        } else {
+          const obj = {
+            message: "No data",
+            results: [],
+            status: false,
+          };
+          res.status(200).json(obj);
+        }
+      } else {
+        next();
+      }
+    } catch (err) {
+      console.log(err);
+      err.statusCode = 500;
+      next();
+    }
+  };
+  static checkWhatsaap = async (req, res, next) => {
+    try {
+      if (req.body.whatsapp) {
+        const results = await userModel.checkWhatsaap(req.body);
+        if (results) {
+          const obj = {
+            message: "Data fetch successfully",
+            results: results,
+            status: true,
+          };
+          res.status(200).json(obj);
+        } else {
+          const obj = {
+            message: "No data",
+            results: [],
+            status: false,
+          };
+          res.status(200).json(obj);
+        }
+      } else {
+        next();
+      }
+    } catch (err) {
+      console.log(err);
+      err.statusCode = 500;
+      next();
+    }
+  };
+  static checkPhone = async (req, res, next) => {
+    try {
+      if (req.body.phone) {
+        const results = await userModel.checkPhone(req.body);
+        if (results) {
+          const obj = {
+            message: "Data fetch successfully",
+            results: results,
+            status: true,
+          };
+          res.status(200).json(obj);
+        } else {
+          const obj = {
+            message: "No data",
+            results: [],
             status: false,
           };
           res.status(200).json(obj);
