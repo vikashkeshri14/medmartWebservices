@@ -54,11 +54,29 @@ module.exports = class userModel {
     }
   };
   static addUser = async (args) => {
-    let name = args.name;
+    let pharmacy_name = args.pharmacy_name;
+    let pharmacy_owner_name = args.pharmacy_owner_name;
+    let whatsapp = args.whatsapp;
     let email = args.email;
     let phone = args.phone;
-    let message = args.message;
 
+    let tax_no = args.tax_no;
+
+    let pharmacy_type = args.pharmacy_type;
+    let password = args.password;
+
+    let created_at = Moment().tz("Asia/Riyadh").format("YYYY-MM-DD HH:mm:ss");
+  };
+  static updateUser = async (args) => {
+    let pharmacy_name = args.pharmacy_name;
+    let pharmacy_owner_name = args.pharmacy_owner_name;
+    let whatsapp = args.whatsapp;
+    let email = args.email;
+    let phone = args.phone;
+    let tax_no = args.tax_no;
+    let pharmacy_type = args.pharmacy_type;
+    let password = args.password;
+    let id = args.id;
     let created_at = Moment().tz("Asia/Riyadh").format("YYYY-MM-DD HH:mm:ss");
   };
   static insertContact = async (args) => {
