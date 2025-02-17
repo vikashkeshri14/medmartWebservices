@@ -1,5 +1,6 @@
 const db = require("../utils/database");
 const fs = require("fs");
+const md5 = require("md5");
 const Moment = require("moment-timezone");
 const path = require("path");
 module.exports = class userModel {
@@ -66,6 +67,23 @@ module.exports = class userModel {
     let password = args.password;
 
     let created_at = Moment().tz("Asia/Riyadh").format("YYYY-MM-DD HH:mm:ss");
+
+    let result = db.query_new(
+      "insert into (pharmacy_owner_name,pharmacy_owner_name,whatsapp,email,phone,tax_no,pharmacy_type,password,created_at,updated_at) values(?,?,?,?,?,?,?,?,?,?)",
+      [
+        pharmacy_name,
+        pharmacy_owner_name,
+        whatsapp,
+        email,
+        phone,
+        tax_no,
+        pharmacy_type,
+        md5(password),
+        created_at,
+        created_at,
+      ]
+    );
+    return result;
   };
   static updateUser = async (args) => {
     let pharmacy_name = args.pharmacy_name;
