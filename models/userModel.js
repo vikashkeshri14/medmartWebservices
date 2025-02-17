@@ -3,6 +3,14 @@ const fs = require("fs");
 const Moment = require("moment-timezone");
 const path = require("path");
 module.exports = class userModel {
+  static addUser = async (args) => {
+    let name = args.name;
+    let email = args.email;
+    let phone = args.phone;
+    let message = args.message;
+
+    let created_at = Moment().tz("Asia/Riyadh").format("YYYY-MM-DD HH:mm:ss");
+  };
   static insertContact = async (args) => {
     let name = args.name;
     let email = args.email;

@@ -9,6 +9,14 @@ module.exports = class projectModel {
     const results = db.query_new("select *from drugs where id=?", [args.id]);
     return results;
   };
+  static getrandomDrugByCat = async (args) => {
+    const results = await db.query_new(
+      "SELECT * FROM drugs where category_slug=? ORDER BY RAND() LIMIT 8",
+      [args.slug]
+    );
+
+    return results;
+  };
 
   static getDrugByKey = async (args) => {
     const results = db.query_new(

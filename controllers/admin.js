@@ -34,4 +34,23 @@ module.exports = class userControllers {
       next();
     }
   };
+
+  static getAdminListPagination = async (req, res, next) => {
+    const results = await adminModel.getAdminListPagination(req.body);
+    if (results) {
+      const obj = {
+        message: "Data fetch successfully",
+        results: results,
+        status: true,
+      };
+      res.status(200).json(obj);
+    } else {
+      const obj = {
+        message: "No data",
+        results: [],
+        status: false,
+      };
+      res.status(200).json(obj);
+    }
+  };
 };

@@ -1,6 +1,6 @@
 const userModel = require("../models/userModel");
-
 const email = require("./mail");
+
 module.exports = class projectControllers {
   static subscribe = async (req, res, next) => {
     // console.log(req.body);
@@ -202,6 +202,25 @@ module.exports = class projectControllers {
       }
     } catch (err) {
       console.log(err);
+      err.statusCode = 500;
+      next();
+    }
+  };
+
+  static registration = async (req, res, next) => {
+    try {
+      if (
+        req.body.name &&
+        req.body.email &&
+        req.body.phone &&
+        req.body.password
+      ) {
+        const results = await userModel.addUser(req.body);
+      } else {
+        next();
+      }
+    } catch (err) {
+      // console.log(err);
       err.statusCode = 500;
       next();
     }

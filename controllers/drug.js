@@ -70,6 +70,26 @@ module.exports = class projectControllers {
       res.status(200).json(obj);
     }
   };
+
+  static getrandomDrugByCat = async (req, res, next) => {
+    const results = await drugModel.getrandomDrugByCat(req.body);
+
+    if (results.length) {
+      const obj = {
+        message: "Data fetch successfully",
+        results: results,
+        status: true,
+      };
+      res.status(200).json(obj);
+    } else {
+      const obj = {
+        message: "No data",
+        results: [],
+        status: false,
+      };
+      res.status(200).json(obj);
+    }
+  };
   static getDrugByKey = async (req, res, next) => {
     const results = await drugModel.getDrugByKey(req.body);
 
