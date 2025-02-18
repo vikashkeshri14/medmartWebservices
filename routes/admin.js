@@ -9,5 +9,7 @@ Router.post("/updateAdmin", adminControllers.updateAdmin);
 Router.post("/checkPhone", adminControllers.checkPhone);
 
 Router.post("/checkEmail", adminControllers.checkEmail);
+Router.post("/getAdminById", adminControllers.getAdminById);
+Router.post("/deleteAdmin", adminControllers.deleteAdmin);
 
 module.exports = Router;

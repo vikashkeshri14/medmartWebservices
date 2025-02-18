@@ -73,7 +73,7 @@ module.exports = class projectControllers {
     try {
       if (req.body.email) {
         const results = await userModel.checkEmail(req.body);
-        if (results) {
+        if (results.length) {
           const obj = {
             message: "Data fetch successfully",
             results: results,
@@ -101,7 +101,7 @@ module.exports = class projectControllers {
     try {
       if (req.body.whatsapp) {
         const results = await userModel.checkWhatsaap(req.body);
-        if (results) {
+        if (results.length) {
           const obj = {
             message: "Data fetch successfully",
             results: results,
@@ -129,7 +129,7 @@ module.exports = class projectControllers {
     try {
       if (req.body.phone) {
         const results = await userModel.checkPhone(req.body);
-        if (results) {
+        if (results.length) {
           const obj = {
             message: "Data fetch successfully",
             results: results,
@@ -149,6 +149,47 @@ module.exports = class projectControllers {
       }
     } catch (err) {
       console.log(err);
+      err.statusCode = 500;
+      next();
+    }
+  };
+
+  static registration = async (req, res, next) => {
+    try {
+      // console.log(req.body);
+      if (
+        req.body.pharmacy_name &&
+        req.body.pharmacy_owner_name &&
+        req.body.whatsapp &&
+        req.body.tax_no &&
+        req.body.pharmacy_type &&
+        req.body.email &&
+        req.body.phone &&
+        req.body.password
+      ) {
+        // console.log("d");
+        const result = await userModel.addUser(req.body);
+        if (result.insertId) {
+          const [email_check] = await userModel.checkEmailPass(
+            req.body.email,
+            req.body.password
+          );
+
+          const obj = {
+            message: "Data deleted successfully",
+            results: email_check,
+            status: true,
+          };
+          res.status(200).json(obj);
+        } else {
+          next();
+        }
+      } else {
+        console.log(req.body);
+        next();
+      }
+    } catch (err) {
+      // console.log(err);
       err.statusCode = 500;
       next();
     }
@@ -322,25 +363,6 @@ module.exports = class projectControllers {
       }
     } catch (err) {
       console.log(err);
-      err.statusCode = 500;
-      next();
-    }
-  };
-
-  static registration = async (req, res, next) => {
-    try {
-      if (
-        req.body.name &&
-        req.body.email &&
-        req.body.phone &&
-        req.body.password
-      ) {
-        const results = await userModel.addUser(req.body);
-      } else {
-        next();
-      }
-    } catch (err) {
-      // console.log(err);
       err.statusCode = 500;
       next();
     }

@@ -6,36 +6,38 @@ const path = require("path");
 module.exports = class userModel {
   static checkEmailPass(email, password) {
     let result = db.query_new(
-      "select id,email,pharmacy_name,pharmacy_owner_name,whatsapp,phone,status from users where email=? and password=?",
+      "select id,email,pharmacy_name,pharmacy_owner_name,whatsapp,phone,status from users where email=? and password=? and is_deleted!=1",
       [email, md5(password)]
     );
     return result;
   }
   static checkEmail = async (args) => {
     if (args.hasOwnProperty("id") && args.id) {
-      let result = db.query_new("select * from users where email=? and id!=?", [
-        args.email,
-        args.id,
-      ]);
+      let result = db.query_new(
+        "select * from users where email=? and id!=? and is_deleted!=1",
+        [args.email, args.id]
+      );
       return result;
     } else {
-      let result = db.query_new("select * from users where email=?", [
-        args.email,
-      ]);
+      let result = db.query_new(
+        "select * from users where email=? and is_deleted!=1",
+        [args.email]
+      );
       return result;
     }
   };
   static checkPhone = async (args) => {
     if (args.hasOwnProperty("id") && args.id) {
-      let result = db.query_new("select * from users where phone=? and id!=?", [
-        args.phone,
-        args.id,
-      ]);
+      let result = db.query_new(
+        "select * from users where phone=? and id!=? and is_deleted!=1",
+        [args.phone, args.id]
+      );
       return result;
     } else {
-      let result = db.query_new("select * from users where phone=?", [
-        args.phone,
-      ]);
+      let result = db.query_new(
+        "select * from users where phone=? and is_deleted!=1",
+        [args.phone]
+      );
       return result;
     }
   };
@@ -43,14 +45,15 @@ module.exports = class userModel {
   static checkWhatsaap = async (args) => {
     if (args.hasOwnProperty("id") && args.id) {
       let result = db.query_new(
-        "select * from users where whatsapp=? and id!=?",
+        "select * from users where whatsapp=? and id!=? and is_deleted!=1",
         [args.whatsapp, args.id]
       );
       return result;
     } else {
-      let result = db.query_new("select * from users where whatsapp=?", [
-        args.whatsapp,
-      ]);
+      let result = db.query_new(
+        "select * from users where whatsapp=? and is_deleted!=1",
+        [args.whatsapp]
+      );
       return result;
     }
   };
@@ -69,7 +72,7 @@ module.exports = class userModel {
     let created_at = Moment().tz("Asia/Riyadh").format("YYYY-MM-DD HH:mm:ss");
 
     let result = db.query_new(
-      "insert into (pharmacy_owner_name,pharmacy_owner_name,whatsapp,email,phone,tax_no,pharmacy_type,password,created_at,updated_at) values(?,?,?,?,?,?,?,?,?,?)",
+      "insert into users (pharmacy_name,pharmacy_owner_name,whatsapp,email,phone,tax_no,pharmacy_type,password,created_at,updated_at) values(?,?,?,?,?,?,?,?,?,?)",
       [
         pharmacy_name,
         pharmacy_owner_name,
@@ -83,6 +86,7 @@ module.exports = class userModel {
         created_at,
       ]
     );
+
     return result;
   };
   static updateUser = async (args) => {

@@ -1,6 +1,43 @@
-const e = require("cors");
+const express = require("cors");
 const adminModel = require("../models/adminModel");
 module.exports = class userControllers {
+  static getAdminById = async (req, res, next) => {
+    const results = await adminModel.getAdminById(req.body);
+    if (results) {
+      const obj = {
+        message: "Data fetch successfully",
+        results: results,
+        status: true,
+      };
+      res.status(200).json(obj);
+    } else {
+      const obj = {
+        message: "No data",
+        results: [],
+        status: false,
+      };
+      res.status(200).json(obj);
+    }
+  };
+  static deleteAdmin = async (req, res, next) => {
+    const results = await adminModel.deleteAdmin(req.body);
+    if (results) {
+      const obj = {
+        message: "Data deleted successfully",
+        results: results,
+        status: true,
+      };
+      res.status(200).json(obj);
+    } else {
+      const obj = {
+        message: "No data",
+        results: [],
+        status: false,
+      };
+      res.status(200).json(obj);
+    }
+  };
+
   static loginAdmin = async (req, res, next) => {
     try {
       if (req.body.email && req.body.password) {
@@ -117,7 +154,7 @@ module.exports = class userControllers {
     try {
       if (req.body.email) {
         const results = await adminModel.checkEmail(req.body);
-        if (results) {
+        if (results.length) {
           const obj = {
             message: "Data fetch successfully",
             results: results,
@@ -145,7 +182,7 @@ module.exports = class userControllers {
     try {
       if (req.body.phone) {
         const results = await adminModel.checkPhone(req.body);
-        if (results) {
+        if (results.length) {
           const obj = {
             message: "Data fetch successfully",
             results: results,
