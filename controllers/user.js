@@ -367,4 +367,34 @@ module.exports = class projectControllers {
       next();
     }
   };
+  static changePassword = async (req, res, next) => {
+    try {
+      // console.log(req.body);
+      if (req.body.oldpassword && req.body.password && req.body.userId) {
+        // console.log("d");
+        const checkPassword = await userModel.checkPassword(req.body);
+        if (checkPassword.length) {
+          const results = await userModel.changePassword(req.body);
+          const obj = {
+            message: "Password change successfully",
+            status: true,
+          };
+          res.status(200).json(obj);
+        } else {
+          const obj = {
+            message: "Enter password not match",
+            status: false,
+          };
+          res.status(200).json(obj);
+        }
+      } else {
+        console.log(req.body);
+        next();
+      }
+    } catch (err) {
+      // console.log(err);
+      err.statusCode = 500;
+      next();
+    }
+  };
 };

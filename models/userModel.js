@@ -11,6 +11,22 @@ module.exports = class userModel {
     );
     return result;
   }
+  static checkPassword = async (args) => {
+    let result = db.query_new("select * from users where password=? and id=?", [
+      md5(args.oldpassword),
+      args.userId,
+    ]);
+    return result;
+  };
+  static changePassword = async (args) => {
+    let created_at = Moment().tz("Asia/Riyadh").format("YYYY-MM-DD HH:mm:ss");
+    let result = db.query_new(
+      "update users set password=?,updated_at=? where id=?",
+      [md5(args.password), created_at, args.userId]
+    );
+    return result;
+  };
+
   static checkEmail = async (args) => {
     if (args.hasOwnProperty("id") && args.id) {
       let result = db.query_new(

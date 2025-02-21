@@ -8,5 +8,6 @@ Router.post("/registration", userControllers.registration);
 Router.post("/checkPhone", userControllers.checkPhone);
 Router.post("/checkEmail", userControllers.checkEmail);
 Router.post("/checkWhatsaap", userControllers.checkWhatsaap);
+Router.post("/changePassword", userControllers.changePassword);
 
 module.exports = Router;

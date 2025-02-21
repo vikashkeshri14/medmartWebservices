@@ -20,7 +20,7 @@ module.exports = class projectModel {
 
   static getDrugByKey = async (args) => {
     const results = db.query_new(
-      `select *from drugs where name like "%${args.key}%" or name_ar like "%${args.key}%" order by name,name_ar limit 0,5 `
+      `select *from drugs where name like "%${args.key}%" or name_ar like "%${args.key}%" or category_slug like "%${args.key}%" order by name,name_ar limit 0,5 `
     );
     return results;
   };
@@ -33,11 +33,11 @@ module.exports = class projectModel {
       args.sortBy
     ) {
       const cnt = await db.query_new(
-        `select count(id) as cnt from drugs where name like "%${args.key}%" or name_ar like "%${args.key}%"`
+        `select count(id) as cnt from drugs where name like "%${args.key}%" or name_ar like "%${args.key}%" or category_slug like "%${args.key}%"`
       );
       if (args.sortBy == "1") {
         const results = await db.query_new(
-          `select d.* , h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where name like "%${args.key}%" or name_ar like "%${args.key}%" order by price  limit ?,?`,
+          `select d.* , h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where d.name like "%${args.key}%" or d.name_ar like "%${args.key}%" or d.category_slug like "%${args.key}% order by price  limit ?,?`,
           [(args.currentPage - 1) * args.postsPerPage, args.postsPerPage]
         );
 
@@ -48,7 +48,7 @@ module.exports = class projectModel {
         return obj;
       } else {
         const results = await db.query_new(
-          `select d.* , h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where name like "%${args.key}%" or name_ar like "%${args.key}%" order by price desc limit ?,?`,
+          `select d.* , h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where d.name like "%${args.key}%" or d.name_ar like "%${args.key}%" or d.category_slug like "%${args.key}%" order by d.price desc limit ?,?`,
           [(args.currentPage - 1) * args.postsPerPage, args.postsPerPage]
         );
 
@@ -60,10 +60,10 @@ module.exports = class projectModel {
       }
     } else if (args.hasOwnProperty("key") && args.key.trim() != "") {
       const cnt = await db.query_new(
-        `select count(id) as cnt from drugs where name like "%${args.key}%" or name_ar like "%${args.key}%"`
+        `select count(id) as cnt from drugs where name like "%${args.key}%" or name_ar like "%${args.key}%" or category_slug like "%${args.key}%"`
       );
       const results = await db.query_new(
-        `select d.* , h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where name like "%${args.key}%" or name_ar like "%${args.key}%" order by id desc limit ?,?`,
+        `select d.* , h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where d.name like "%${args.key}%" or d.name_ar like "%${args.key}%" or d.category_slug like "%${args.key}%" order by d.id desc limit ?,?`,
         [(args.currentPage - 1) * args.postsPerPage, args.postsPerPage]
       );
 
@@ -77,7 +77,7 @@ module.exports = class projectModel {
 
       if (args.sortBy == "1") {
         const results = await db.query_new(
-          "select d.*,h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  order by price  limit ?,?",
+          "select d.*,h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  order by d.price  limit ?,?",
           [(args.currentPage - 1) * args.postsPerPage, args.postsPerPage]
         );
 
@@ -88,7 +88,7 @@ module.exports = class projectModel {
         return obj;
       } else {
         const results = await db.query_new(
-          "select d.*,h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  order by price desc limit ?,?",
+          "select d.*,h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  order by d.price desc limit ?,?",
           [(args.currentPage - 1) * args.postsPerPage, args.postsPerPage]
         );
 
@@ -101,7 +101,7 @@ module.exports = class projectModel {
     } else {
       const cnt = await db.query_new("select count(id) as cnt from drugs");
       const results = await db.query_new(
-        "select d.*,h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  order by id desc limit ?,?",
+        "select d.*,h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  order by d.id desc limit ?,?",
         [(args.currentPage - 1) * args.postsPerPage, args.postsPerPage]
       );
 
@@ -115,12 +115,12 @@ module.exports = class projectModel {
 
   static getDrugByPaginationByAllFilter = async (args) => {
     const cnt = await db.query_new(
-      `select count(id) as cnt from drugs where (name like "%${args.key}%" or name_ar like "%${args.key}%") and category_slug in (?)`,
+      `select count(id) as cnt from drugs where (name like "%${args.key}%" or name_ar like "%${args.key}%" or category_slug like "%${args.key}%") and category_slug in (?)`,
       [args.categories]
     );
     if (args.sortBy == "1") {
       const results = await db.query_new(
-        `select d.* , h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where (d.name like "%${args.key}%" or d.name_ar like "%${args.key}%") and d.category_slug in (?) order by price  limit ?,?`,
+        `select d.* , h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where (d.name like "%${args.key}%" or d.name_ar like "%${args.key}%" or d.category_slug like "%${args.key}%") and d.category_slug in (?) order by d.price  limit ?,?`,
         [
           args.categories,
           (args.currentPage - 1) * args.postsPerPage,
@@ -135,7 +135,7 @@ module.exports = class projectModel {
       return obj;
     } else {
       const results = await db.query_new(
-        `select d.* , h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where (d.name like "%${args.key}%" or d.name_ar like "%${args.key}%") and d.category_slug in (?) order by price desc limit ?,?`,
+        `select d.* , h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where (d.name like "%${args.key}%" or d.name_ar like "%${args.key}%" or d.category_slug like "%${args.key}%") and d.category_slug in (?) order by d.price desc limit ?,?`,
         [
           args.categories,
           (args.currentPage - 1) * args.postsPerPage,
@@ -153,11 +153,11 @@ module.exports = class projectModel {
 
   static getDrugByPaginationKeyCat = async (args) => {
     const cnt = await db.query_new(
-      `select count(id) as cnt from drugs where (name like "%${args.key}%" or name_ar like "%${args.key}%") and category_slug in (?)`,
+      `select count(id) as cnt from drugs where (name like "%${args.key}%" or name_ar like "%${args.key}%" or category_slug like "%${args.key}%") and category_slug in (?)`,
       [args.categories]
     );
     const results = await db.query_new(
-      `select d.*,h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where (d.name like "%${args.key}%" or d.name_ar like "%${args.key}%") and  d.category_slug in (?) order by id desc limit ?,?`,
+      `select d.*,h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where (d.name like "%${args.key}%" or d.name_ar like "%${args.key}%" or d.category_slug like "%${args.key}%" ) and  d.category_slug in (?) order by d.id desc limit ?,?`,
       [
         args.categories,
         (args.currentPage - 1) * args.postsPerPage,
@@ -179,7 +179,7 @@ module.exports = class projectModel {
     );
     if (args.sortBy == "1") {
       const results = await db.query_new(
-        `select d.* , h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where d.category_slug in (?) order by price  limit ?,?`,
+        `select d.* , h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where d.category_slug in (?) order by d.price  limit ?,?`,
         [
           args.categories,
           (args.currentPage - 1) * args.postsPerPage,
@@ -194,7 +194,7 @@ module.exports = class projectModel {
       return obj;
     } else {
       const results = await db.query_new(
-        `select d.* , h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where d.category_slug in (?) order by price desc limit ?,?`,
+        `select d.* , h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where d.category_slug in (?) order by d.price desc limit ?,?`,
         [
           args.categories,
           (args.currentPage - 1) * args.postsPerPage,
@@ -217,7 +217,7 @@ module.exports = class projectModel {
       [args.categories]
     );
     const results = await db.query_new(
-      "select d.*,h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where d.category_slug in (?) order by id desc limit ?,?",
+      "select d.*,h.id as hotdeal, b.id as bestdeal from drugs as d left join hotdeals as h on h.drug_id=d.id left join bestselling as b on b.drug_id=d.id  where d.category_slug in (?) order by d.id desc limit ?,?",
       [
         args.categories,
         (args.currentPage - 1) * args.postsPerPage,
