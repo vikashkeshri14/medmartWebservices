@@ -36,6 +36,8 @@ const adminRouter = require("./routes/admin");
 const brandRouter = require("./routes/brand");
 const drugRouter = require("./routes/drug");
 const userRouter = require("./routes/user");
+const orderRouter = require("./routes/orders");
+
 const categoryRouter = require("./routes/categories");
 
 const errorController = require("./controllers/errors");
@@ -44,6 +46,7 @@ app.use("/drugs", drugRouter);
 app.use("/brand", brandRouter);
 app.use("/user", userRouter);
 app.use("/categories", categoryRouter);
+app.use("/order", orderRouter);
 app.use(errorController.geterror404);
 app.use(errorController.geterror500);
 
