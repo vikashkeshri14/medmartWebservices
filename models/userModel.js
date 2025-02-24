@@ -120,7 +120,7 @@ module.exports = class userModel {
     let created_at = Moment().tz("Asia/Riyadh").format("YYYY-MM-DD HH:mm:ss");
 
     let result = await db.query_new(
-      "update users set pharmacy_name=?,pharmacy_owner_name=?,whatsapp=?,tax_no,pharmacy_type=?,updated_at=? where id=?",
+      "update users set pharmacy_name=?,pharmacy_owner_name=?,whatsapp=?,tax_no=?,pharmacy_type=?,updated_at=? where id=?",
       [
         pharmacy_name,
         pharmacy_owner_name,
@@ -131,6 +131,7 @@ module.exports = class userModel {
         id,
       ]
     );
+
     return result;
   };
   static insertContact = async (args) => {

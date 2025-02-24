@@ -226,7 +226,7 @@ module.exports = class projectControllers {
 
   static updateUser = async (req, res, next) => {
     try {
-      // console.log(req.body);
+      console.log(req.body);
       if (
         req.body.pharmacy_name &&
         req.body.pharmacy_owner_name &&
@@ -236,9 +236,11 @@ module.exports = class projectControllers {
         req.body.id
       ) {
         const check = await userModel.checkWhatsaap(req.body);
-
-        if (check.length == 0) {
+        // console.log(check.length);
+        if (check.length == "0") {
           const result = await userModel.updateUser(req.body);
+          //   console.log("result");
+          //   return;
           if (result) {
             const obj = {
               message: "user updated successfully",
@@ -262,7 +264,7 @@ module.exports = class projectControllers {
         next();
       }
     } catch (err) {
-      // console.log(err);
+      console.log(err);
       err.statusCode = 500;
       next();
     }
