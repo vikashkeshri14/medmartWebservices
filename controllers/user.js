@@ -37,6 +37,35 @@ module.exports = class projectControllers {
     }
   };
 
+  static getUserById = async (req, res, next) => {
+    try {
+      if (req.body.id) {
+        const results = await userModel.getUserById(req.body);
+        if (results.length) {
+          const obj = {
+            message: "Data fetch successfully",
+            results: results,
+            status: true,
+          };
+          res.status(200).json(obj);
+        } else {
+          const obj = {
+            message: "No data",
+            results: [],
+            status: false,
+          };
+          res.status(200).json(obj);
+        }
+      } else {
+        next();
+      }
+    } catch (err) {
+      console.log(err);
+      err.statusCode = 500;
+      next();
+    }
+  };
+
   static subscribe = async (req, res, next) => {
     // console.log(req.body);
     try {
@@ -183,6 +212,50 @@ module.exports = class projectControllers {
           res.status(200).json(obj);
         } else {
           next();
+        }
+      } else {
+        console.log(req.body);
+        next();
+      }
+    } catch (err) {
+      // console.log(err);
+      err.statusCode = 500;
+      next();
+    }
+  };
+
+  static updateUser = async (req, res, next) => {
+    try {
+      // console.log(req.body);
+      if (
+        req.body.pharmacy_name &&
+        req.body.pharmacy_owner_name &&
+        req.body.whatsapp &&
+        req.body.tax_no &&
+        req.body.pharmacy_type &&
+        req.body.id
+      ) {
+        const check = await userModel.checkWhatsaap(req.body);
+
+        if (check.length == 0) {
+          const result = await userModel.updateUser(req.body);
+          if (result) {
+            const obj = {
+              message: "user updated successfully",
+              results: result,
+              status: true,
+            };
+            res.status(200).json(obj);
+          } else {
+            next();
+          }
+        } else {
+          const obj = {
+            message: "Whatsapp number exist in the database",
+            results: [],
+            status: false,
+          };
+          res.status(200).json(obj);
         }
       } else {
         console.log(req.body);

@@ -11,6 +11,7 @@ module.exports = class userModel {
     );
     return result;
   }
+
   static checkPassword = async (args) => {
     let result = db.query_new("select * from users where password=? and id=?", [
       md5(args.oldpassword),
@@ -73,6 +74,10 @@ module.exports = class userModel {
       return result;
     }
   };
+  static getUserById = async (args) => {
+    let result = db.query_new("select * from users where id=?", [args.id]);
+    return result;
+  };
   static addUser = async (args) => {
     let pharmacy_name = args.pharmacy_name;
     let pharmacy_owner_name = args.pharmacy_owner_name;
@@ -109,13 +114,24 @@ module.exports = class userModel {
     let pharmacy_name = args.pharmacy_name;
     let pharmacy_owner_name = args.pharmacy_owner_name;
     let whatsapp = args.whatsapp;
-    let email = args.email;
-    let phone = args.phone;
     let tax_no = args.tax_no;
     let pharmacy_type = args.pharmacy_type;
-    let password = args.password;
     let id = args.id;
     let created_at = Moment().tz("Asia/Riyadh").format("YYYY-MM-DD HH:mm:ss");
+
+    let result = await db.query_new(
+      "update users set pharmacy_name=?,pharmacy_owner_name=?,whatsapp=?,tax_no,pharmacy_type=?,updated_at=? where id=?",
+      [
+        pharmacy_name,
+        pharmacy_owner_name,
+        whatsapp,
+        tax_no,
+        pharmacy_type,
+        created_at,
+        id,
+      ]
+    );
+    return result;
   };
   static insertContact = async (args) => {
     let name = args.name;
