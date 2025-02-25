@@ -10,11 +10,11 @@ module.exports = class orderModel {
     let vat = args.vat;
     let shipping = args.shipping;
     let paymentType = args.paymentType;
-    let rand = Math.random() * 100 + new Date.getTime();
+    let rand = Math.random() * 100 + Moment();
     let token = md5(rand);
 
     let results = db.query_new(
-      "insert orders (user_id,subtotal,vat,shipping,total,paymentType,token,created_at,updated_at) values(?,?,?,?,?,?,?,?,?)",
+      "insert orders (user_id,subtotal,vat,shipping,total,payment_type,token,created_at,updated_at) values(?,?,?,?,?,?,?,?,?)",
       [
         user_id,
         subtotal,

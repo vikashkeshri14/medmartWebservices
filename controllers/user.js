@@ -66,6 +66,35 @@ module.exports = class projectControllers {
     }
   };
 
+  static getAddress = async (req, res, next) => {
+    try {
+      if (req.body.user_id && req.body.type) {
+        const results = await userModel.getAddress(req.body);
+        if (results.length) {
+          const obj = {
+            message: "Data fetch successfully",
+            results: results,
+            status: true,
+          };
+          res.status(200).json(obj);
+        } else {
+          const obj = {
+            message: "No data",
+            results: [],
+            status: false,
+          };
+          res.status(200).json(obj);
+        }
+      } else {
+        next();
+      }
+    } catch (err) {
+      console.log(err);
+      err.statusCode = 500;
+      next();
+    }
+  };
+
   static subscribe = async (req, res, next) => {
     // console.log(req.body);
     try {
@@ -226,7 +255,6 @@ module.exports = class projectControllers {
 
   static updateUser = async (req, res, next) => {
     try {
-      console.log(req.body);
       if (
         req.body.pharmacy_name &&
         req.body.pharmacy_owner_name &&
@@ -256,6 +284,47 @@ module.exports = class projectControllers {
             message: "Whatsapp number exist in the database",
             results: [],
             status: false,
+          };
+          res.status(200).json(obj);
+        }
+      } else {
+        console.log(req.body);
+        next();
+      }
+    } catch (err) {
+      console.log(err);
+      err.statusCode = 500;
+      next();
+    }
+  };
+
+  static updateAddress = async (req, res, next) => {
+    try {
+      if (
+        req.body.address &&
+        req.body.city &&
+        req.body.zip &&
+        req.body.phone &&
+        req.body.type &&
+        req.body.user_id
+      ) {
+        const check = await userModel.getAddress(req.body);
+        if (check.length == "0") {
+          const result = await userModel.insertAddress(req.body);
+
+          const obj = {
+            message: "user updated successfully",
+            results: result,
+            status: true,
+          };
+          res.status(200).json(obj);
+        } else {
+          const result = await userModel.updateAddress(req.body);
+
+          const obj = {
+            message: "user updated successfully",
+            results: result,
+            status: true,
           };
           res.status(200).json(obj);
         }

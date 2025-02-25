@@ -78,6 +78,50 @@ module.exports = class userModel {
     let result = db.query_new("select * from users where id=?", [args.id]);
     return result;
   };
+
+  static getAddress = async (args) => {
+    let result = db.query_new(
+      "select * from billing_address where type=? and user_id=?",
+      [args.type, args.user_id]
+    );
+    return result;
+  };
+
+  static insertAddress = async (args) => {
+    let address = args.address;
+    let phone = args.phone;
+    let city = args.city;
+    let zip = args.zip;
+    let user_id = args.user_id;
+    let type = args.type;
+    let toName = args.toName;
+    let created_at = Moment().tz("Asia/Riyadh").format("YYYY-MM-DD HH:mm:ss");
+
+    let result = db.query_new(
+      "insert into billing_address (user_id,city,zipcode,type,address,phone,toName,created_at,updated_at) values(?,?,?,?,?,?,?,?,?)",
+      [user_id, city, zip, type, address, phone, toName, created_at, created_at]
+    );
+
+    return result;
+  };
+  static updateAddress = async (args) => {
+    let address = args.address;
+    let phone = args.phone;
+    let city = args.city;
+    let zip = args.zip;
+    let user_id = args.user_id;
+    let type = args.type;
+    let toName = args.toName;
+    let created_at = Moment().tz("Asia/Riyadh").format("YYYY-MM-DD HH:mm:ss");
+
+    let result = await db.query_new(
+      "update billing_address set address=?,phone=?,city=?,zipcode=?,toName=?,updated_at=? where user_id=? and type=?",
+      [address, phone, city, zip, toName, created_at, user_id, type]
+    );
+
+    return result;
+  };
+
   static addUser = async (args) => {
     let pharmacy_name = args.pharmacy_name;
     let pharmacy_owner_name = args.pharmacy_owner_name;
