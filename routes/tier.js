@@ -1,6 +1,7 @@
 const express = require("express");
 const tierControllers = require("../controllers/tier");
 const Router = express.Router();
+Router.post("/getTierById", tierControllers.getTierById);
 
 Router.post("/addTier", tierControllers.addTier);
 

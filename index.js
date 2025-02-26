@@ -16,6 +16,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "http://localhost:3001",
+      "http://localhost:3002",
       "http://192.168.21.53:3002",
       "http://192.168.21.53:3001",
       "http://192.168.21.53:3000",
@@ -37,6 +38,8 @@ const brandRouter = require("./routes/brand");
 const drugRouter = require("./routes/drug");
 const userRouter = require("./routes/user");
 const orderRouter = require("./routes/orders");
+const cityRouter = require("./routes/city");
+const tierRouter = require("./routes/tier");
 
 const categoryRouter = require("./routes/categories");
 
@@ -47,6 +50,9 @@ app.use("/brand", brandRouter);
 app.use("/user", userRouter);
 app.use("/categories", categoryRouter);
 app.use("/order", orderRouter);
+app.use("/city", cityRouter);
+app.use("/tier", tierRouter);
+
 app.use(errorController.geterror404);
 app.use(errorController.geterror500);
 

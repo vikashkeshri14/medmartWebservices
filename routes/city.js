@@ -1,6 +1,7 @@
 const express = require("express");
 const cityControllers = require("../controllers/city");
 const Router = express.Router();
+Router.post("/getCityById", cityControllers.getCityById);
 
 Router.post("/addCity", cityControllers.addCity);
 
