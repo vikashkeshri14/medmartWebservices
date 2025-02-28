@@ -40,6 +40,7 @@ const userRouter = require("./routes/user");
 const orderRouter = require("./routes/orders");
 const cityRouter = require("./routes/city");
 const tierRouter = require("./routes/tier");
+const supplierRouter = require("./routes/supplier");
 
 const categoryRouter = require("./routes/categories");
 
@@ -52,6 +53,7 @@ app.use("/categories", categoryRouter);
 app.use("/order", orderRouter);
 app.use("/city", cityRouter);
 app.use("/tier", tierRouter);
+app.use("/supplier", supplierRouter);
 
 app.use(errorController.geterror404);
 app.use(errorController.geterror500);
