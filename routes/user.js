@@ -13,5 +13,6 @@ Router.post("/checkPhone", userControllers.checkPhone);
 Router.post("/checkEmail", userControllers.checkEmail);
 Router.post("/checkWhatsaap", userControllers.checkWhatsaap);
 Router.post("/changePassword", userControllers.changePassword);
+Router.post("/forgetPassword", userControllers.forgetPassword);
 
 module.exports = Router;

@@ -40,6 +40,9 @@ module.exports = class userModel {
         "select * from users where email=? and is_deleted!=1",
         [args.email]
       );
+      console.log("select * from users where email=? and is_deleted!=1", [
+        args.email,
+      ]);
       return result;
     }
   };

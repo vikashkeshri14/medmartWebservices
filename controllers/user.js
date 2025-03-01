@@ -2,6 +2,43 @@ const userModel = require("../models/userModel");
 const email = require("./mail");
 
 module.exports = class projectControllers {
+  static forgetPassword = async (req, res, next) => {
+    try {
+      if (req.body.email) {
+        const email_check = await userModel.checkEmail(req.body);
+        if (email_check.length) {
+          email.sendmail({
+            action_url: "http://localhost:3000",
+            username: email_check[0].pharmacy_name,
+            contact: "http://localhost:3000/medmart/contact-us",
+            subject: "reset",
+            email: req.body.email,
+          });
+          const obj = {
+            message: "Please check the email to reset your password",
+            status: true,
+          };
+          res.status(200).json(obj);
+        } else {
+          const obj = {
+            message: "Please enter the correct email",
+            status: false,
+          };
+          res.status(200).json(obj);
+        }
+      } else {
+        const obj = {
+          message: "Enter the email",
+          status: false,
+        };
+        res.status(200).json(obj);
+      }
+    } catch (err) {
+      console.log(err);
+      err.statusCode = 500;
+      next();
+    }
+  };
   static login = async (req, res, next) => {
     try {
       if (req.body.email && req.body.password) {
